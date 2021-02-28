@@ -1,5 +1,6 @@
 package labs.khobfa.adoptapuppy.ui.screens
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,8 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Female
-import androidx.compose.material.icons.filled.LockClock
 import androidx.compose.material.icons.filled.Male
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,27 +40,115 @@ data class Puppy(
     val name: String,
     val age: Float,
     val breed: String,
-    val sex: Sex
+    val sex: Sex,
+    @DrawableRes val image: Int,
+    val description: String
 )
 
+const val lorem: String = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+        "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+
 val puppies = listOf(
-    Puppy("Cherry", 0.8f, "King Charles Spaniel", Sex.MALE),
-    Puppy("Puppy", 0.1f, "Beagle", Sex.FEMALE),
-    Puppy("Cherry", 0.8f, "King Charles Spaniel", Sex.MALE),
-    Puppy("Puppy", 0.1f, "Beagle", Sex.FEMALE),
-    Puppy("Cherry", 0.8f, "King Charles Spaniel", Sex.MALE),
-    Puppy("Puppy", 0.1f, "Beagle", Sex.FEMALE),
-    Puppy("Cherry", 0.8f, "King Charles Spaniel", Sex.MALE),
-    Puppy("Puppy", 0.1f, "Beagle", Sex.FEMALE),
+    Puppy(
+        name = "Cherry",
+        age = 0.8f,
+        breed = "German Shepherd",
+        sex = Sex.MALE,
+        image = R.drawable.ic_german,
+        description = lorem
+    ),
+    Puppy(
+        name = "Puppy",
+        age = 0.1f,
+        breed = "Beagle",
+        sex = Sex.FEMALE,
+        image = R.drawable.ic_cavachon,
+        description = lorem
+    ),
+
+    Puppy(
+        name = "Cherry",
+        age = 0.8f,
+        breed = "Akita Pit",
+        sex = Sex.MALE,
+        image = R.drawable.ic_akita_pit,
+        description = lorem
+    ),
+
+    Puppy(
+        name = "Cherry",
+        age = 0.8f,
+        breed = "King Charles Spaniel",
+        sex = Sex.MALE,
+        image = R.drawable.ic_spaniel,
+        description = lorem
+    ),
+
+    Puppy(
+        name = "Puppy",
+        age = 0.1f,
+        breed = "Afador",
+        sex = Sex.FEMALE,
+        image = R.drawable.ic_afador,
+        description = lorem
+    ),
+
+    Puppy(
+        name = "Puppy",
+        age = 0.1f,
+        breed = "Beagle",
+        sex = Sex.FEMALE,
+        image = R.drawable.ic_chihuahua,
+        description = lorem
+    ),
+
+    Puppy(
+        name = "Cherry",
+        age = 0.8f,
+        breed = "King Charles Spaniel",
+        sex = Sex.MALE,
+        image = R.drawable.ic_german,
+        description = lorem
+    ),
+    Puppy(
+        name = "Puppy",
+        age = 0.1f,
+        breed = "Beagle",
+        sex = Sex.FEMALE,
+        image = R.drawable.ic_german,
+        description = lorem
+    ),
 )
 
 @ExperimentalFoundationApi
 @Composable
 fun PuppyListScreen(navController: NavController?) {
-    PuppyList(
-        navController = navController!!,
-        puppies = puppies
-    )
+    Column(
+        Modifier
+            .fillMaxSize()
+    ) {
+        SearchHeader()
+        PuppyList(
+            navController = navController!!,
+            puppies = puppies
+        )
+    }
+}
+
+@Composable
+fun SearchHeader() {
+    Row(
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+
+        Text(
+            text = "Adopt Doggy",
+            style = TextStyle(fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+        )
+    }
 }
 
 @ExperimentalFoundationApi
@@ -68,7 +157,11 @@ fun PuppyList(
     navController: NavController,
     puppies: List<Puppy>
 ) {
-    LazyVerticalGrid(cells = GridCells.Fixed(2)) {
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(2),
+        modifier = Modifier
+            .padding(bottom = 5.dp)
+    ) {
         itemsIndexed(puppies) { index, puppy ->
             PuppyCard(
                 puppy = puppy,
@@ -89,15 +182,16 @@ fun PuppyCard(puppy: Puppy, modifier: Modifier = Modifier, click: (Puppy) -> Uni
         .clickable { click(puppy) }
         .width(120.dp)
         .height(240.dp)
-        .clip(RoundedCornerShape(8.dp))
+        .clip(RoundedCornerShape(16.dp))
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_german),
+            painter = painterResource(puppy.image),
             contentDescription = "${puppy.breed} bread image",
             modifier = Modifier
                 .fillMaxSize(),
             contentScale = ContentScale.Crop
         )
+
         Column(
             modifier = Modifier
                 .padding(10.dp)
@@ -107,41 +201,52 @@ fun PuppyCard(puppy: Puppy, modifier: Modifier = Modifier, click: (Puppy) -> Uni
                 text = puppy.name,
                 style = TextStyle(
                     color = Color.White,
-                    fontSize = 12.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = puppy.breed, style = TextStyle(color = Color.White, fontSize = 12.sp))
+            Text(
+                text = puppy.breed,
+                style = TextStyle(
+                    color = Color.White,
+                    fontSize = 13.sp
+                )
+            )
 
             Row(
-                modifier = Modifier.fillMaxWidth(0.5f),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row {
-                    Icon(imageVector = Icons.Default.LockClock, contentDescription = "clock")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Alarm, contentDescription = "clock",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(end = 5.dp)
+                    )
                     Text(
                         text = "${puppy.age} months",
                         style = TextStyle(
                             color = Color.White,
                             fontSize = 12.sp,
-                            fontWeight = FontWeight.Light
                         )
                     )
                 }
-
-                Row {
+                Spacer(modifier = Modifier.width(20.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = if (puppy.sex == Sex.MALE) Icons.Default.Male else Icons.Default.Female,
-                        contentDescription = "clock"
+                        contentDescription = "clock",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(end = 5.dp)
                     )
                     Text(
-                        text = "${puppy.age} months",
+                        text = if (puppy.sex == Sex.MALE) "Boy" else "Girl",
                         style = TextStyle(
                             color = Color.White,
                             fontSize = 12.sp,
-                            fontWeight = FontWeight.Light
                         )
                     )
                 }

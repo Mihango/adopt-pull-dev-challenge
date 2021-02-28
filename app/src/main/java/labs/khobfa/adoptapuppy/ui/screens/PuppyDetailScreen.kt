@@ -8,12 +8,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Female
-import androidx.compose.material.icons.filled.LockClock
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Male
-import androidx.compose.material.icons.filled.Pin
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,8 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.navigate
-import labs.khobfa.adoptapuppy.R
 import labs.khobfa.adoptapuppy.ui.theme.AdoptApuppyTheme
 
 @Composable
@@ -37,9 +36,7 @@ fun PuppyDetailScreen(
     position: Int
 ) {
     PuppyDetail(puppy = puppies[position]) {
-        navController!!.navigate(MainScreens.DashBoard.route) {
-            popUpTo = navController.graph.startDestination
-        }
+        navController!!.popBackStack()
     }
 }
 
@@ -47,7 +44,7 @@ fun PuppyDetailScreen(
 fun PuppyDetail(puppy: Puppy, navigateHome: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.ic_chihuahua),
+            painter = painterResource(id = puppy.image),
             contentDescription = puppy.name,
             modifier = Modifier
                 .fillMaxWidth(1f)
@@ -60,7 +57,7 @@ fun PuppyDetail(puppy: Puppy, navigateHome: () -> Unit) {
                 .padding(horizontal = 24.dp)
                 .offset(y = -(50.dp))
                 .clip(RoundedCornerShape(16.dp))
-                .background(Color.LightGray)
+                .background(Color.White)
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Row(
@@ -82,7 +79,7 @@ fun PuppyDetail(puppy: Puppy, navigateHome: () -> Unit) {
                 Text(text = "Border collie")
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        imageVector = Icons.Default.LockClock,
+                        imageVector = Icons.Default.Alarm,
                         contentDescription = "clock"
                     )
                     Spacer(Modifier.width(2.dp))
@@ -101,7 +98,7 @@ fun PuppyDetail(puppy: Puppy, navigateHome: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                Icon(Icons.Default.Pin, "")
+                Icon(Icons.Default.LocationOn, "")
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(text = "120 N 4th St, Brooklyn, NY, USA")
             }
@@ -109,21 +106,18 @@ fun PuppyDetail(puppy: Puppy, navigateHome: () -> Unit) {
 
         Column(
             modifier = Modifier
-                .offset(y = -(40).dp)
+                .offset(y = -(70).dp)
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Text(text = puppy.name)
+            Text(text = puppy.name, style = MaterialTheme.typography.subtitle2)
+            Text(text = puppy.description)
 
-            Text(
-                text = "Card is the implementation of a CardView in Compose Card is the implementation of a CardView in Compose" +
-                        "Card is the implementation of a CardView in Compose Card is the implementation of a CardView in Compose"
-            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
