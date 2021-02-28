@@ -1,6 +1,5 @@
 package labs.khobfa.adoptapuppy.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
 import labs.khobfa.adoptapuppy.R
 import labs.khobfa.adoptapuppy.ui.theme.AdoptApuppyTheme
 
@@ -54,13 +55,17 @@ val puppies = listOf(
 
 @ExperimentalFoundationApi
 @Composable
-fun PuppyListScreen() {
-    PuppyList(puppies = puppies)
+fun PuppyListScreen(navController: NavController?) {
+    PuppyList(
+        navController = navController!!,
+        puppies = puppies
+    )
 }
 
 @ExperimentalFoundationApi
 @Composable
 fun PuppyList(
+    navController: NavController,
     puppies: List<Puppy>
 ) {
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
@@ -71,7 +76,7 @@ fun PuppyList(
                     .offset(y = 25.dp)
                 else Modifier
             ) {
-                Log.e("Puppy $index", "name : ${it.name} >>>> selected")
+                navController.navigate("${MainScreens.Details.route}/$index")
             }
         }
     }
@@ -150,7 +155,7 @@ fun PuppyCard(puppy: Puppy, modifier: Modifier = Modifier, click: (Puppy) -> Uni
 @Composable
 fun PuppyListPreview() {
     AdoptApuppyTheme {
-        PuppyListScreen()
+        PuppyListScreen(null)
     }
 }
 

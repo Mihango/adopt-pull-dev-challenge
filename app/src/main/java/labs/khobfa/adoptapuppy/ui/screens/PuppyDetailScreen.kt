@@ -26,16 +26,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navigate
 import labs.khobfa.adoptapuppy.R
 import labs.khobfa.adoptapuppy.ui.theme.AdoptApuppyTheme
 
 @Composable
-fun PuppyDetailScreen() {
-    PuppyDetail(puppy = puppies[0])
+fun PuppyDetailScreen(
+    navController: NavController?,
+    position: Int
+) {
+    PuppyDetail(puppy = puppies[position]) {
+        navController!!.navigate(MainScreens.DashBoard.route) {
+            popUpTo = navController.graph.startDestination
+        }
+    }
 }
 
 @Composable
-fun PuppyDetail(puppy: Puppy) {
+fun PuppyDetail(puppy: Puppy, navigateHome: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.ic_chihuahua),
@@ -118,7 +127,7 @@ fun PuppyDetail(puppy: Puppy) {
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
-                onClick = { /*TODO*/ }) {
+                onClick = { navigateHome() }) {
                 Text(text = "Adoption")
             }
         }
@@ -131,6 +140,6 @@ fun PuppyDetail(puppy: Puppy) {
 @Composable
 fun PuppyDetailScreenPreview() {
     AdoptApuppyTheme {
-        PuppyDetailScreen()
+        PuppyDetailScreen(null, 0)
     }
 }

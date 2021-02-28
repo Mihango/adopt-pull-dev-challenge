@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import labs.khobfa.adoptapuppy.ui.screens.PuppyDetailScreen
+import labs.khobfa.adoptapuppy.ui.screens.NavScreen
 import labs.khobfa.adoptapuppy.ui.theme.AdoptApuppyTheme
 
 class MainActivity : AppCompatActivity() {
@@ -17,8 +17,7 @@ class MainActivity : AppCompatActivity() {
             AdoptApuppyTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-//                    PuppyListScreen()
-                    PuppyDetailScreen()
+                    NavScreen()
                 }
             }
         }
